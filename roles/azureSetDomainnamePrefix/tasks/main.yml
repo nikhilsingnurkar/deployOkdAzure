@@ -1,0 +1,6 @@
+---
+
+- name: Set dnsName prefix to "{{ vname | lower}}"
+  command: az network public-ip update -g "{{ azure_ResourceGroup }}" -n "{{ vname | lower }}"PublicIP --dns-name "{{ vname | lower}}"
+
+...

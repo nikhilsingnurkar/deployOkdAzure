@@ -1,0 +1,4 @@
+/extraVars.yml
+/group_vars/os_vars.yml
+/inventory/hosts
+/*.retry

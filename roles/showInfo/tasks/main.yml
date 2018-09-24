@@ -1,0 +1,19 @@
+---
+
+- name: Set variables
+  set_fact:
+    line1: "You can now access OpenShift OKD via: https://master0{{ azure_virtualMachineName }}.westeurope.cloudapp.azure.com:8443/console "
+    line2: "Please note that you have to accept the selfsigned certificate in your browser. Login: developer, password: developer."
+    line3: "You can find the link to the php demo application under project 'devoteam php countdown project'."
+    line4: "The link is http://phpcountdown-php-devoteam.{{ master0PublicIP }}.nip.io. "
+
+- name: Show Info lines
+  debug:
+    msg: "{{ item }}"
+  with_items:
+    - "{{ line1 }}"
+    - "{{ line2 }}"
+    - "{{ line3 }}"
+    - "{{ line4 }}"
+
+...

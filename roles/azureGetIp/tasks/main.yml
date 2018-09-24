@@ -1,0 +1,162 @@
+---
+
+##########################
+# Check if machine is up #
+##########################
+
+- name: wait for 120 seconds for machine to come up
+  wait_for:
+    timeout: 120
+
+#########################
+# HOSTS                #
+########################
+#delete os.yml when we deploy the master
+- name: remove inventory/hosts file
+  file:
+    path: "inventory/hosts"
+    state: absent
+  when: vname.find('master') != -1
+
+#generate os.yml when we deploy the master
+- name: create new inventory/hosts file
+  file:
+    path: "inventory/hosts"
+    state: touch
+  when: vname.find('master') != -1
+
+#add master line to file (HOSTS)
+- name: add block to file (Master)
+  blockinfile:
+    marker: ''
+    marker_begin: ''
+    marker_end: ''
+    dest: "inventory/hosts"
+    state: present
+    block: |
+      [okdmaster]
+      {{ vname }}.westeurope.cloudapp.azure.com
+
+      [okd]
+      {{ vname }}.westeurope.cloudapp.azure.com
+  when: vname.find('master') != -1
+
+#add node line to file
+- name: add line to file (Node)
+  lineinfile:
+    path: "inventory/hosts"
+    line: "{{ vname }}.westeurope.cloudapp.azure.com"
+  when: vname.find('node') != -1
+
+#add infranode to file
+- name: add line to file (Infranode)
+  lineinfile:
+    path: "inventory/hosts"
+    line: "{{ vname }}.westeurope.cloudapp.azure.com"
+  when: vname.find('infra') != -1
+
+
+#########################
+# PUBLIC               #
+#########################
+
+#delete os_vars.yml when we deploy the master
+- name: remove old dynamic host file
+  file:
+    path: "group_vars/os_vars.yml"
+    state: absent
+  when: vname.find('master') != -1
+
+#generate os_vars.yml when we deploy the master
+- name: create new dynamic host file
+  file:
+    path: "group_vars/os_vars.yml"
+    state: touch
+  when: vname.find('master') != -1
+
+- name: get IP from Azure via 'az network' command
+  command: az network public-ip show -g "{{ azure_ResourceGroup }}" -n "{{ vname }}PublicIP"
+  register: azure_ip
+
+- name: Json to variable
+  set_fact:
+    ips: "{{ azure_ip.stdout | from_json }}"
+
+- name: set IP as fact satIP
+  set_fact:
+    ip_address: "{{ ips.ipAddress }}"
+
+- name: print variable ip_address (debug)
+  debug:
+    msg: "IP: {{ ip_address }}"
+
+# - name: add _host dynamic with ip "{{ ip_address }}"
+#   add_host:
+#     name: "{{ ip_address }}"
+#     groups: dynamic
+#add master line to file
+
+- name: add line to file (Master)
+  blockinfile:
+    marker: ''
+    marker_begin: ''
+    marker_end: ''
+    dest: "group_vars/os_vars.yml"
+    state: present
+    block: |
+      ---
+
+      master0PublicIP: {{ ip_address }}
+  when: vname.find('master') != -1
+
+#add node line to file
+- name: add line to file (Node)
+  lineinfile:
+    path: "group_vars/os_vars.yml"
+    line: "node0PublicIP: {{ ip_address }}"
+  when: vname.find('node') != -1
+
+#add infranode to file
+- name: add line to file (Infranode)
+  lineinfile:
+    path: "group_vars/os_vars.yml"
+    line: "infra0PublicIP: {{ ip_address }}"
+  when: vname.find('infra') != -1
+
+#########################
+# PRIVATE               #
+#########################
+- name: get private IP
+  command: az vm show -g "{{ azure_ResourceGroup }}" -n "{{ vname }}" --show-details --query 'privateIps'
+  register: azure_ip
+
+- name: Json to variable
+  set_fact:
+    private_ip: "{{ azure_ip.stdout | from_json }}"
+
+- name: Debug show variable private_ip
+  debug:
+    msg: "IPs: {{ private_ip }}"
+
+#add master line to file
+- name: add block to file (Master)
+  lineinfile:
+    path: "group_vars/os_vars.yml"
+    line: "master0IP: {{ private_ip }}"
+  when: vname.find('master') != -1
+
+#add node line to file
+- name: add line to file (Node)
+  lineinfile:
+    path: "group_vars/os_vars.yml"
+    line: "node0IP: {{ private_ip }}"
+  when: vname.find('node') != -1
+
+#add infranode to file
+- name: add line to file (Infranode)
+  lineinfile:
+    path: "group_vars/os_vars.yml"
+    line: "infra0IP: {{ private_ip }}"
+  when: vname.find('infra') != -1
+
+...

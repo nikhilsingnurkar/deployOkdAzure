@@ -1,0 +1,27 @@
+---
+
+- name: Remove old files template
+  file:
+    state: absent
+    path: "roles/resources/template/{{ item }}"
+  with_items:
+    - parameters.json
+    - template.json
+  tags:
+    - deployment
+
+- name: Create parameters.json file from template
+  template:
+    src: parameters.json.j2
+    dest: roles/resources/template/parameters.json
+  tags:
+    - deployment
+
+- name: Create template.json file from template
+  template:
+    src: template.json.j2
+    dest: roles/resources/template/template.json
+  tags:
+    - deployment
+
+...

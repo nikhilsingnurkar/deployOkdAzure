@@ -1,0 +1,22 @@
+---
+
+- hosts: localhost
+  connection: local
+  become_user: awx #please comment this line if you do NOT run this from Ansible Tower!
+  become_method: sudo
+
+  roles:
+
+    # login to Mirosoft Azure
+    - role: azureLogin
+
+    # master
+    - { role: azureCreateTemplate, vname: "{{ azure.virtualMachineMaster }}" }
+    - { role: azureDeployVM, vname: "{{ azure.virtualMachineMaster }}" }
+    - { role: azureGetIp, vname: "{{ azure.virtualMachineMaster }}" }
+    - { role: azureSetDomainnamePrefix, vname: "{{ azure.virtualMachineMaster }}" }
+
+    # open port 8443 on master for openshift console and 3306 for the mariadb application we will deploy
+    - { role: azureOpenPorts, vname: "{{ azure.virtualMachineMaster }}", inbound_index: [1,2], azure_inbound: [8443,3306], prio: 500 }
+
+...

@@ -1,0 +1,66 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "westeurope"
+        },
+        "virtualMachineName": {
+            "value": "master0devohn"
+        },
+        "virtualMachineSize": {
+            "value": "Standard_D2s_v3"
+        },
+        "adminUsername": {
+            "value": "clusteradmin"
+        },
+        "virtualNetworkName": {
+            "value": "RG-Lab-HansNeefs-vnet"
+        },
+        "networkInterfaceName": {
+            "value": "master0devohn770"
+        },
+        "networkSecurityGroupName": {
+            "value": "master0devohnNSG"
+        },
+        "adminPublicKey": {
+            "value": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC+vIn4F06dBv5GpBrzUo0/4NV11a3zESxc1RjYyhBJCvqa0DRfLecZtTrCFyxw1Jc9v4jtm65829+Gj7uU+hY4BFiiOwRWWg2NR7xJajKGPmC+qUF9KxfSWaRQbFtHPbPV8WL/PwLRTzZa2RXmPRFpmI6TVT6PjGOcfkxUBC1CPE+FabW6U541NTy/T2lpjaAcqNyVKQD5xO+VUfZYBlzmeIr845y6Y5hSbs2y3qfNQvltdx5bZ40FN9WTwxypRQiLHetJO0u+Gqzoxuqg9UL/q7WMxGQ0g4yAcSx1+rz4qcFQutX2uPC3TbYsX9E94TPgHs3lCvGb6qbrDRTkDbaB"
+        },
+        "diagnosticsStorageAccountName": {
+            "value": "cidiag728"
+        },
+        "diagnosticsStorageAccountId": {
+            "value": "/subscriptions/4760579d-6e21-4a51-988b-54af405584f4/resourceGroups/CI/providers/Microsoft.Storage/storageAccounts/cidiag728"
+        },
+        "addressPrefix": {
+            "value": "172.16.10.0/24"
+        },
+        "subnetName": {
+            "value": "default"
+        },
+        "subnetPrefix": {
+            "value": "172.16.10.0/24"
+        },
+        "publicIpAddressName": {
+            "value": "master0devohnPublicIP"
+        },
+        "publicIpAddressType": {
+            "value": "Static"
+        },
+        "publicIpAddressSku": {
+            "value": "Basic"
+        },
+        "autoShutdownStatus": {
+            "value": "Enabled"
+        },
+        "autoShutdownTime": {
+            "value": "17:00"
+        },
+        "autoShutdownTimeZone": {
+            "value": "Romance Standard Time"
+        },
+        "autoShutdownNotificationStatus": {
+            "value": "Disabled"
+        }
+    }
+}

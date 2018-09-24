@@ -1,0 +1,15 @@
+---
+
+- name: login as sytem:admin
+  shell: oc login 127.0.0.1:8443 --insecure-skip-tls-verify=true -u system:admin
+  become: true
+  become_user: root
+  become_method: sudo
+
+- name: create user to openshift and give clusteradmin rights to developer user
+  command: oc adm policy add-cluster-role-to-user cluster-admin developer
+  become: true
+  become_user: root
+  become_method: sudo
+
+...

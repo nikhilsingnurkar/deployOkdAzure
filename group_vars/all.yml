@@ -1,0 +1,38 @@
+---
+
+azure_machine_sku: "7.5"
+azure_virtualMachineSize: Standard_B2ms
+#examples: Standard_B2ms, Standard_B4ms, Standard_D2s_v3, Standard_D4s_v3, Standard_E2s_v3, Standard_E46s_v3
+azure_wait: 120
+
+#Azure parameters
+azure:
+
+  #the entered variables are stripped to alphanumeric and lowercase
+  virtualMachineMaster: "master0{{ azure_virtualMachineName | regex_replace('\\W+') | lower }}"
+
+  #general
+  location: "westeurope"
+
+  #net
+  addressPrefix: "172.16.10.0/24"
+  subnetName: "default"
+  subnetPrefix: "172.16.10.0/24"
+
+  publicIpAddressType: "Static"
+  publicIpAddressSku: "Basic"
+
+  #shutdown
+  autoShutdownStatus: "Enabled"
+  autoShutdownTime: "17:00"
+  autoShutdownTimeZone: "Romance Standard Time"
+  autoShutdownNotificationStatus: "Disabled"
+
+
+  machine:
+    offer: CentOS
+    publisher: OpenLogic
+    sku: '7.5'
+    version: latest
+
+...

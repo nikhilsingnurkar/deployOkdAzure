@@ -1,0 +1,106 @@
+---
+
+#############################
+# start here for CentOS    #
+############################
+
+- name: install Openshift Container platform needed packages
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - wget
+    - git
+    - net-tools
+    - bind-utils
+    - iptables-services
+    - bridge-utils
+    - bash-completion
+    - kexec-tools
+    - sos
+    - psacct
+  register: result
+  retries: 10
+  until: result.rc == 0
+  delay: 5
+  become: true
+  become_user: root
+  become_method: sudo
+
+- name: update all
+  yum:
+    name: '*'
+    state: latest
+  become: true
+  become_user: root
+  become_method: sudo
+
+- name: install docker
+  yum:
+    name: docker
+    state: latest
+  become: true
+  become_user: root
+  become_method: sudo
+
+- name: install openshift origin
+  yum:
+    name: centos-release-openshift-origin
+    state: latest
+  become: true
+  become_user: root
+  become_method: sudo
+
+- name: install openshift origin clients
+  yum:
+    name: origin-clients
+    state: latest
+  become: true
+  become_user: root
+  become_method: sudo
+
+- name: update /etc/sysconfig/docker
+  command: sed -i '/OPTIONS=.*/c\OPTIONS="--selinux-enabled --insecure-registry 172.30.0.0/16"' /etc/sysconfig/docker
+  become: true
+  become_user: root
+  become_method: sudo
+
+- name: start/enable docker
+  systemd:
+    name: docker
+    state: started
+    enabled: yes
+  become: true
+  become_user: root
+  become_method: sudo
+
+- name: configure systemd
+  blockinfile:
+    create: yes
+    path: /etc/systemd/system/openshift.service
+    block: |
+      [Unit]
+      Description=OpenShift oc cluster up Service
+      After=docker.service
+      Requires=docker.service
+
+      [Service]
+      ExecStart=/usr/bin/oc cluster up --public-hostname={{ azure.virtualMachineMaster }}.westeurope.cloudapp.azure.com --routing-suffix={{ master0PublicIP }}.nip.io
+      ExecStop=/usr/bin/oc cluster down
+      WorkingDirectory=/home/clusteradmin/
+      Restart=no
+      StandardOutput=syslog
+      StandardError=syslog
+      SyslogIdentifier=occlusterup
+      User=root
+      Type=oneshot
+      RemainAfterExit=yes
+      TimeoutSec=300
+
+      [Install]
+      WantedBy=multi-user.target
+  become: true
+  become_user: root
+  become_method: sudo
+
+...

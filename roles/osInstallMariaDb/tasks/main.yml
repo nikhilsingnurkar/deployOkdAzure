@@ -1,0 +1,19 @@
+---
+
+  - name: login as developer
+    command: oc login 127.0.0.1:8443 -u developer -p developer --insecure-skip-tls-verify=true
+
+  - name: create new project mariadb
+    command: oc new-project mariadb --display-name='mariadb project'
+    ignore_errors: yes #when already exists
+
+  - name: goto mariadb project
+    command: oc project mariadb
+
+  - name: create new app mariadb
+    command: oc new-app -e MYSQL_USER=developer MYSQL_PASSWORD=developer MYSQL_ROOT_PASSWORD=developer MYSQL_DATABASE=phpDB  centos/mariadb-101-centos7
+
+  - name: expose the app
+    command: oc expose svc/mariadb-101-centos7
+
+...

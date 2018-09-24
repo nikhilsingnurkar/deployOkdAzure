@@ -1,0 +1,22 @@
+---
+
+- hosts: okd
+  become_user: clusteradmin
+  become_method: sudo
+  become: yes
+
+  pre_tasks:
+
+     - name: "INCLUDES | Include group_vars/os_vars.yml"
+       include_vars: ./group_vars/os_vars.yml
+
+  roles:
+
+    - role: osStart
+    - role: osReStart
+    - role: osConfigureUsers
+    - role: osInstallPHPApplication
+    # - role: osInstallMariaDb
+    - role: showInfo
+
+...

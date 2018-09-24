@@ -1,0 +1,34 @@
+---
+
+- name: login as developer
+  command: oc login 127.0.0.1:8443 -u developer -p developer --insecure-skip-tls-verify=true
+
+- name: create new project gitlab
+  command: oc new-project gitlab --display-name='gitlab project'
+  ignore_errors: yes #when already exists
+
+- name: goto gitlab project
+  command: oc project gitlab
+
+- name: create gitlab map if not already there
+  file:
+    path: ~/gitlab/
+    force: no
+    state: directory
+
+- name: wget gitlab
+  get_url:
+    url: https://gitlab.com/gitlab-org/omnibus-gitlab/raw/master/docker/openshift-template.json
+    dest: ~/gitlab/
+    force: yes
+
+- name: install gitlab template
+  command: oc create -f openshift-template.json
+  args:
+    chdir: /home/clusteradmin/gitlab/
+  ignore_errors: yes #when already exists
+
+- name: set parameters for the template and deploy
+  shell: "oc process gitlab-ce --param APPLICATION_HOSTNAME=gitlab.{{ master0PublicIP }}.nip.io | oc create -f -"
+
+...

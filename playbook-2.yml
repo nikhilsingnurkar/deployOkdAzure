@@ -1,0 +1,18 @@
+---
+
+- hosts: okd
+  become_user: clusteradmin
+  become_method: sudo
+
+  pre_tasks:
+
+     - name: "INCLUDES | Include group_vars/os_vars.yml"
+       include_vars: ./group_vars/os_vars.yml
+
+  roles:
+
+    - role: osPrerequisites #https://github.com/isnuryusuf/openshift-install/blob/master/openshift-origin-quickstart.md
+    - role: osDNS
+    # - role: osKeygen
+
+...

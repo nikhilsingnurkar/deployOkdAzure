@@ -1,0 +1,13 @@
+---
+
+- name: show ports to open inbound (info)
+  debug:
+    msg: "Ports Inbound: {{ item[0] }} : {{ item[1] }} _ {{ prio + item[0] | int }}"
+  loop: "{{ query('together', inbound_index, azure_inbound) }}"
+
+- name: open ports inbound
+  command: az vm open-port --resource-group "{{ azure_ResourceGroup }}" --name "{{ vname }}" --port "{{ item[1] }}" --priority "{{  prio + item[0] | int }}"
+  loop: "{{ query('together', inbound_index, azure_inbound) }}"
+  delegate_to: localhost
+
+...

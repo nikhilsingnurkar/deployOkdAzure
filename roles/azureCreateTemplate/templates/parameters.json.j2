@@ -1,0 +1,66 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "{{ azure.location }}"
+        },
+        "virtualMachineName": {
+            "value": "{{ vname | lower }}"
+        },
+        "virtualMachineSize": {
+            "value": "{{ azure_virtualMachineSize }}"
+        },
+        "adminUsername": {
+            "value": "clusteradmin"
+        },
+        "virtualNetworkName": {
+            "value": "{{ azure_ResourceGroup }}-vnet"
+        },
+        "networkInterfaceName": {
+            "value": "{{ vname | lower }}770"
+        },
+        "networkSecurityGroupName": {
+            "value": "{{ vname | lower }}NSG"
+        },
+        "adminPublicKey": {
+            "value": "{{ ssh_sshPubKey }}"
+        },
+        "diagnosticsStorageAccountName": {
+            "value": "cidiag728"
+        },
+        "diagnosticsStorageAccountId": {
+            "value": "/subscriptions/4760579d-6e21-4a51-988b-54af405584f4/resourceGroups/CI/providers/Microsoft.Storage/storageAccounts/cidiag728"
+        },
+        "addressPrefix": {
+            "value": "{{ azure.addressPrefix }}"
+        },
+        "subnetName": {
+            "value": "{{ azure.subnetName }}"
+        },
+        "subnetPrefix": {
+            "value": "{{ azure.subnetPrefix }}"
+        },
+        "publicIpAddressName": {
+            "value": "{{ vname | lower }}PublicIP"
+        },
+        "publicIpAddressType": {
+            "value": "{{ azure.publicIpAddressType }}"
+        },
+        "publicIpAddressSku": {
+            "value": "{{ azure.publicIpAddressSku }}"
+        },
+        "autoShutdownStatus": {
+            "value": "{{ azure.autoShutdownStatus }}"
+        },
+        "autoShutdownTime": {
+            "value": "{{ azure.autoShutdownTime }}"
+        },
+        "autoShutdownTimeZone": {
+            "value": "{{ azure.autoShutdownTimeZone }}"
+        },
+        "autoShutdownNotificationStatus": {
+            "value": "{{ azure.autoShutdownNotificationStatus }}"
+        }
+    }
+}

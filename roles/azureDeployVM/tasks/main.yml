@@ -1,0 +1,10 @@
+---
+
+  - name: Deploy to Azure via script
+    command: az group deployment create --name {{ vname }} --template-file template.json --parameters parameters.json --resource-group {{ azure_ResourceGroup }} --no-wait
+    args:
+      chdir: roles/resources/template/
+    tags:
+      - deployment
+
+...

@@ -1,0 +1,6 @@
+---
+
+  - name: login into azure
+    command: az login -u {{ AZURE_AD_USER }} -p {{ AZURE_PASSWORD }}
+
+...

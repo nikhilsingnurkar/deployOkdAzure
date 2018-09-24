@@ -1,0 +1,30 @@
+---
+
+- name: Remove old files template
+  file:
+    state: absent
+    path: "roles/resources/template/{{ item }}"
+  with_items:
+    - installer.cfg.yml
+    - hosts
+  become: no
+  delegate_to: localhost
+
+- name: Create hosts file from template
+  template:
+    src: hosts.j2
+    dest: roles/resources/template/hosts
+  become: no
+  delegate_to: localhost
+
+- name: Create dir on host ~/.config/openshift/
+  file:
+    path: ~/.config/openshift/
+    state: directory
+
+- name: upload ansible hosts file to master
+  copy:
+    src: roles/resources/template/hosts
+    dest: ~/.config/openshift/hosts
+
+...

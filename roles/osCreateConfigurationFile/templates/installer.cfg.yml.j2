@@ -1,0 +1,48 @@
+---
+
+ansible_callback_facts_yaml: /home/clusteradmin/.config/openshift/.ansible/callback_facts.yaml
+ansible_inventory_path: /home/clusteradmin/.config/openshift/hosts
+ansible_log_path: /tmp/ansible.log
+deployment:
+  ansible_ssh_user: clusteradmin
+  hosts:
+  - connect_to: master.openshift.example.com
+    hostname: "{{ azure.virtualMachineMaster }}"
+    ip: "{{ master0IP }}"
+    node_labels:
+      region: infra
+    public_hostname: "{{ azure.virtualMachineMaster }}.westeurope.cloudapp.azure.com"
+    public_ip: "{{ master0PublicIP }}"
+    roles:
+    - master
+    - etcd
+    - node
+    - storage
+  - connect_to: node.openshift.example.com
+    hostname: node0-devoteam-dvt
+    ip: "{{ node0IP }}"
+    node_labels:
+      region: infra
+    public_hostname: "{{ azure.virtualMachineNode }}.westeurope.cloudapp.azure.com"
+    public_ip: "{{ node0PublicIP }}"
+    roles:
+    - node
+  master_routingconfig_subdomain: ''
+  openshift_master_cluster_hostname: None
+  openshift_master_cluster_public_hostname: None
+  openshift_master_dynamic_provisioning_enabled: true
+  proxy_exclude_hosts: ''
+  proxy_http: ''
+  proxy_https: ''
+  roles:
+    etcd: {}
+    master:
+      openshift_disable_check: memory_availability
+    node:
+      openshift_disable_check: memory_availability
+    storage: {}
+variant: openshift-enterprise
+variant_version: '3.9'
+version: v2
+
+...

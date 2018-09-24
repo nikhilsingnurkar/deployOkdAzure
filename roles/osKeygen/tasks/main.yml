@@ -1,0 +1,27 @@
+---
+
+- name: Generate /etc/ssh/ RSA host key
+  command : ssh-keygen -b 2048 -t rsa -f .ssh/id_rsa -q -N ""
+  args:
+    creates: .ssh/id_rsa
+  when: "'master' in inventory_hostname"
+
+- name: copy key to localhost
+  fetch:
+    src: .ssh/id_rsa.pub
+    dest: ./tmp/
+    flat: yes
+  when: "'master' in inventory_hostname"
+
+- name: set variable to content
+  set_fact:
+    id_rsa_pub: "{{ lookup('file', './tmp/id_rsa.pub') }}"
+  delegate_to: localhost
+
+- name: copy keys to node/infranode when not on master
+  lineinfile:
+    path: .ssh/authorized_keys
+    line: "{{ id_rsa_pub }}"
+    state: present
+
+...

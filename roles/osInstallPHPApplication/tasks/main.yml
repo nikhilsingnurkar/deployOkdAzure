@@ -1,0 +1,19 @@
+---
+
+- name: login as developer
+  command: oc login 127.0.0.1:8443 -u developer -p developer --insecure-skip-tls-verify=true
+
+- name: create new project php-devoteam
+  command: oc new-project php-devoteam --display-name='devoteam php countdown project'
+  ignore_errors: yes #when already exists
+
+- name: goto php-devoteam project
+  command: oc project php-devoteam
+
+- name: create new app phpcountdown
+  command: oc new-app centos/php-71-centos7 --code=https://odyssey.devoteam.be/publicOKD/phpCountdown.git
+
+- name: expose the app
+  command: oc expose svc/phpcountdown
+
+...

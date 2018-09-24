@@ -1,0 +1,43 @@
+
+[OSEv3:children]
+nodes
+nfs
+masters
+etcd
+
+[masters]
+master.openshift.example.com  openshift_public_ip={{ master0PublicIP }} openshift_ip={{ master0IP }} openshift_public_hostname={{ azure.virtualMachineMaster }}.westeurope.cloudapp.azure.com openshift_hostname={{ azure.virtualMachineMaster }} connect_to=master.openshift.example.com ansible_connection=local ansible_become=yes
+
+[nodes]
+master.openshift.example.com  openshift_public_ip=1{{ master0PublicIP }} openshift_ip=1{{ master0IP }} openshift_public_hostname={{ azure.virtualMachineMaster }}.westeurope.cloudapp.azure.com openshift_hostname=master.openshift.example.com connect_to=master.openshift.example.com openshift_node_labels="{'region': 'infra'}" openshift_schedulable=True ansible_connection=local ansible_become=yes openshift_node_group_name="node-config-master-infra"
+
+
+[OSEv3:vars]
+openshift_master_cluster_public_hostname=None
+ansible_ssh_user=clusteradmin
+openshift_master_cluster_hostname=None
+ansible_become=yes
+openshift_hostname_check=false
+openshift_deployment_type=origin
+openshift_web_console_install=true
+
+os_firewall_use_firewalld=true
+
+openshift_disable_check=memory_availability,disk_availability,docker_image_availability
+
+# uncomment the following to enable htpasswd authentication; defaults to AllowAllPasswordIdentityProvider
+openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider'}]
+
+
+[nodes:vars]
+openshift_disable_check=memory_availability,disk_availability
+
+[masters:vars]
+openshift_disable_check=memory_availability,disk_availability
+
+
+[nfs]
+master.openshift.example.com  openshift_public_ip={{ master0PublicIP }} openshift_ip={{ master0IP }} openshift_public_hostname={{ azure.virtualMachineMaster }}.westeurope.cloudapp.azure.com openshift_hostname={{ azure.virtualMachineMaster }} connect_to=master.openshift.example.com ansible_connection=local ansible_become=yes
+
+[etcd]
+master.openshift.example.com  openshift_public_ip={{ master0PublicIP }} openshift_ip={{ master0IP }} openshift_public_hostname={{ azure.virtualMachineMaster }}.westeurope.cloudapp.azure.com openshift_hostname={{ azure.virtualMachineMaster }} connect_to=master.openshift.example.com ansible_connection=local ansible_become=yes
