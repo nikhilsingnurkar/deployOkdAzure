@@ -23,10 +23,10 @@ azure:
   publicIpAddressSku: "Basic"
 
   #shutdown
-  autoShutdownStatus: "Enabled"
-  autoShutdownTime: "17:00"
-  autoShutdownTimeZone: "Romance Standard Time"
-  autoShutdownNotificationStatus: "Disabled"
+  autoShutdownStatus: "Disabled"
+  # autoShutdownTime: "17:00"
+  # autoShutdownTimeZone: "Romance Standard Time"
+  # autoShutdownNotificationStatus: "Disabled"
 
 
   machine:
