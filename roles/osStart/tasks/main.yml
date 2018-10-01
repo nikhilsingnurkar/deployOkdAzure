@@ -8,11 +8,13 @@
   become: true
   become_user: root
   become_method: sudo
+  ignore_errors: yes # when already running ignore
 
 - name: start openshift
   command: "oc cluster up --public-hostname={{ azure.virtualMachineMaster }}.westeurope.cloudapp.azure.com --routing-suffix={{ master0PublicIP }}.nip.io --write-config=true"
   become: true
   become_user: root
   become_method: sudo
+  ignore_errors: yes # when already running ignore
 
 ...
