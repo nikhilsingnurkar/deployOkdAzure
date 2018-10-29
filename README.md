@@ -1,4 +1,4 @@
-# RHEL Deployment to Azure
+# OKD Deployment to Azure
 
 This playbooks deploys a RHEL server (using parameters) to azure, waits for IP and creates default user clusteradmin.
 The seccond playbook in playbook.yml can be extended with new roles to install/configure extra software.
