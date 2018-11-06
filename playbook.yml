@@ -5,6 +5,13 @@
   become_user: awx #please comment this line if you do NOT run this from Ansible Tower!
   become_method: sudo
 
+  pre_tasks:
+
+     - name: "INCLUDES | secret.yml"
+       include_vars: secret.yml
+       ignore_errors: yes
+       no_log: yes
+
   roles:
 
     # login to Mirosoft Azure

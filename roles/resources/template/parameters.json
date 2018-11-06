@@ -9,7 +9,7 @@
             "value": "master0devohn"
         },
         "virtualMachineSize": {
-            "value": "Standard_D2s_v3"
+            "value": "Standard_B2ms"
         },
         "adminUsername": {
             "value": "clusteradmin"
@@ -51,7 +51,7 @@
             "value": "Basic"
         },
         "autoShutdownStatus": {
-            "value": "Enabled"
+            "value": "Disabled"
         },
         "autoShutdownTime": {
             "value": "17:00"
